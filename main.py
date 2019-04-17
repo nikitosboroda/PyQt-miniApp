@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 import app
 import thing
 import loginproc
@@ -24,7 +24,7 @@ class MainWin(QtWidgets.QMainWindow, app.Ui_MainWindow):
 		self.setupUi(self)
 		self.findBtn.clicked.connect(self.sql_settings)
 		#self.logBtn.clicked.connect(self.login_proc)
-		self.favBtn.clicked.connect(self.favourte_things)
+		#self.favBtn.clicked.connect(self.favourte_things)
 		self.categBox.activated[str].connect(self.set_category)
 	
 	def sql_connection(self):
@@ -69,11 +69,11 @@ class MainWin(QtWidgets.QMainWindow, app.Ui_MainWindow):
 	def sql_settings(self, text=None):
 		try:
 			self.text = self.lineFind.text()
-			if text == '':
+			if self.text == '':
 				sql = """SELECT * FROM users;"""
 				self.sql_find_btn(sql)
 			else:
-				sql = " SELECT * FROM ..."
+				sql = '''SELECT * FROM ...'''+self.sql_categ ####ПОДПРАВИТЬ ЗАПРОС
 				self.sql_find_btn(sql)
 		except Exception as e:
 			print("ERROR -> ", e)
@@ -81,8 +81,11 @@ class MainWin(QtWidgets.QMainWindow, app.Ui_MainWindow):
 	def favourte_things(self):
 		pass
 	
-	def set_category(self):
-		pass
+	def set_category(self, text):
+		if text == 'Put category':
+			return
+		else:
+			self.sql_categ =  '''WHERE Category = %s;'''.format(text)
 
 
 class ThingWin(QtWidgets.QMainWindow, thing.Ui_ThingWindow):
